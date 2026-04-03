@@ -7,266 +7,206 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --blue: #2196F3;
-  --blue-dark: #1565C0;
-  --blue-light: #BBDEFB;
-  --orange: #FF9800;
-  --orange-dark: #E65100;
-  --green: #4CAF50;
-  --green-light: #C8E6C9;
-  --red: #F44336;
-  --red-light: #FFCDD2;
-  --bg: #E3F2FD;
-  --white: #FFFFFF;
-  --gray-dark: #607D8B;
-  --text: #263238;
-}
-html, body {
-  width: 100%; height: 100%;
-  font-family: 'M PLUS Rounded 1c', sans-serif;
-  background: var(--bg); color: var(--text);
-  overflow: hidden; touch-action: manipulation;
-  -webkit-user-select: none; user-select: none;
-}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--blue:#2196F3;--blue-dark:#1565C0;--blue-light:#BBDEFB;--orange:#FF9800;--orange-dark:#E65100;--green:#4CAF50;--green-light:#C8E6C9;--red:#F44336;--red-light:#FFCDD2;--bg:#E3F2FD;--white:#FFF;--gray-dark:#607D8B;--text:#263238}
+html,body{width:100%;height:100%;font-family:'M PLUS Rounded 1c',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 
-/* ============ TITLE ============ */
-#title-screen {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  height: 100vh; gap: 20px; padding: 20px;
-  background: linear-gradient(135deg, #1976D2 0%, #42A5F5 50%, #90CAF9 100%);
-}
-#title-screen h1 {
-  font-size: clamp(28px, 6vw, 48px); color: #FFF;
-  text-shadow: 2px 3px 0 rgba(0,0,0,0.15);
-  text-align: center; line-height: 1.3;
-}
-.subtitle { font-size: clamp(14px, 3vw, 20px); color: rgba(255,255,255,0.85); margin-top: -10px; }
-.globe-emoji { font-size: clamp(60px, 15vw, 100px); }
-.course-buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
-.course-btn {
-  padding: 18px 36px; border: none; border-radius: 16px;
-  font-family: inherit; font-size: clamp(18px, 4vw, 26px); font-weight: 800;
-  cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.2), 0 6px 20px rgba(0,0,0,0.15);
-  min-width: 200px; text-align: center;
-}
-.course-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
-.btn-lower { background: var(--orange); color: #FFF; }
-.btn-upper { background: var(--green); color: #FFF; }
+/* ===== SCREENS ===== */
+.screen{display:none;flex-direction:column;height:100vh;height:100dvh}
+.screen.active{display:flex}
 
-/* ============ GAME ============ */
-#game-screen { display: none; flex-direction: column; height: 100vh; height: 100dvh; }
+/* ===== TITLE ===== */
+#title-screen{align-items:center;justify-content:center;gap:16px;padding:20px;background:linear-gradient(135deg,#1976D2 0%,#42A5F5 50%,#90CAF9 100%)}
+#title-screen h1{font-size:clamp(26px,5.5vw,44px);color:#FFF;text-shadow:2px 3px 0 rgba(0,0,0,.15);text-align:center;line-height:1.3}
+.subtitle{font-size:clamp(13px,2.8vw,18px);color:rgba(255,255,255,.85)}
+.globe-emoji{font-size:clamp(50px,12vw,80px)}
+.title-buttons{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:8px;width:100%;max-width:420px}
+.title-row{display:flex;gap:12px;width:100%;justify-content:center}
+.course-btn{padding:14px 24px;border:none;border-radius:14px;font-family:inherit;font-size:clamp(16px,3.5vw,22px);font-weight:800;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.2);flex:1;text-align:center;max-width:200px}
+.course-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.btn-lower{background:var(--orange);color:#FFF}
+.btn-upper{background:var(--green);color:#FFF}
+.title-sub-btn{padding:12px 20px;border:none;border-radius:12px;font-family:inherit;font-size:clamp(13px,3vw,17px);font-weight:700;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15);flex:1;text-align:center;max-width:200px}
+.title-sub-btn:active{transform:translateY(2px)}
+.btn-list{background:#FFF;color:var(--blue-dark)}
+.btn-sound{background:#FFF;color:var(--gray-dark)}
 
-.top-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 6px 12px; background: var(--blue); color: #FFF; font-weight: 700; flex-shrink: 0;
-}
-.top-bar .course-label { background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 14px; }
-.top-bar .progress { font-size: 16px; font-weight: 900; }
-.home-btn {
-  background: rgba(255,255,255,0.2); border: none; color: #FFF;
-  padding: 6px 14px; border-radius: 8px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
-}
+/* ===== GAME ===== */
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--blue);color:#FFF;font-weight:700;flex-shrink:0;gap:6px}
+.home-btn{background:rgba(255,255,255,.2);border:none;color:#FFF;padding:6px 12px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.case-toggle{display:flex;border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,.3)}
+.case-toggle button{border:none;padding:5px 14px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);transition:background .15s}
+.case-toggle button.active{background:rgba(255,255,255,.95);color:var(--blue-dark)}
+.progress{font-size:15px;font-weight:900}
 
-.score-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 4px 12px; background: var(--blue-dark); color: #FFF; font-size: 13px; font-weight: 700; flex-shrink: 0;
-}
-.score-item { display: flex; align-items: center; gap: 6px; }
-.score-badge { padding: 2px 10px; border-radius: 10px; font-size: 14px; font-weight: 800; }
-.badge-input { background: var(--orange); }
-.badge-miss { background: var(--red); }
+/* Display: 3 columns */
+.display-area{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 12px;min-height:0;gap:12px}
+.col-flag{font-size:clamp(60px,16vw,110px);line-height:1;flex-shrink:0}
+.col-name{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:1;min-width:0}
+.country-name{font-size:clamp(20px,5vw,34px);font-weight:900;text-align:center;line-height:1.2;word-break:keep-all}
+.col-romaji{flex-shrink:1;min-width:0}
+.romaji-box{background:var(--white);border:3px solid var(--blue);border-radius:14px;padding:8px 14px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.romaji-text{font-size:clamp(22px,5.5vw,38px);font-weight:900;letter-spacing:2px;word-break:break-all;font-family:'Courier New',monospace}
+.romaji-text .typed{color:var(--green)}
+.romaji-text .current{color:var(--orange);text-decoration:underline;text-underline-offset:4px}
+.romaji-text .remaining{color:#B0BEC5}
 
-/* Display area: country left, flag right */
-.display-area {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 8px 16px; gap: 8px; min-height: 0;
-}
-.country-row {
-  display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%;
-}
-.country-info { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-.country-name { font-size: clamp(22px, 5.5vw, 38px); font-weight: 900; text-align: right; line-height: 1.2; }
-.hint-btn {
-  background: var(--blue-light); border: 2px solid var(--blue); border-radius: 10px;
-  padding: 5px 16px; font-family: inherit; font-size: clamp(13px, 3vw, 17px);
-  font-weight: 700; color: var(--blue-dark); cursor: pointer;
-}
-.hint-btn:active { background: var(--blue); color: #FFF; }
-.hint-content { font-size: clamp(16px, 3.5vw, 22px); color: var(--gray-dark); font-weight: 700; }
-.flag-display { font-size: clamp(70px, 18vw, 120px); line-height: 1; }
+/* Nav */
+.nav-area{display:flex;justify-content:center;align-items:center;padding:4px 10px;flex-shrink:0;gap:12px}
+.nav-btn{background:var(--blue);color:#FFF;border:none;border-radius:14px;padding:14px 0;font-family:inherit;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 var(--blue-dark);flex:1;max-width:160px;text-align:center}
+.nav-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue-dark)}
+.nav-btn:disabled{opacity:.3;cursor:default}
 
-.romaji-box {
-  background: var(--white); border: 3px solid var(--blue); border-radius: 16px;
-  padding: 10px 20px; min-width: 260px; max-width: 95%; text-align: center;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-}
-.romaji-text {
-  font-size: clamp(26px, 7vw, 44px); font-weight: 900;
-  letter-spacing: 3px; word-break: break-all; font-family: 'Courier New', monospace;
-}
-.romaji-text .typed { color: var(--green); }
-.romaji-text .current {
-  color: var(--orange); text-decoration: underline; text-underline-offset: 4px;
-  animation: pulse 0.8s ease-in-out infinite;
-}
-.romaji-text .remaining { color: #B0BEC5; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+/* Keyboard */
+.keyboard-wrap{padding:6px 4px 10px;background:#CFD8DC;border-top:2px solid #B0BEC5;flex-shrink:0;position:relative}
+.kb-row{display:flex;justify-content:center;gap:4px;margin-bottom:4px}
+.kb-key{display:flex;align-items:center;justify-content:center;background:var(--white);border:1px solid #B0BEC5;border-radius:8px;font-family:'Courier New',monospace;font-size:clamp(18px,4.5vw,26px);font-weight:700;min-width:clamp(30px,8.5vw,50px);height:clamp(46px,11.5vw,62px);cursor:pointer;box-shadow:0 3px 0 #B0BEC5;-webkit-tap-highlight-color:transparent}
+.kb-key:active{transform:translateY(2px);box-shadow:0 1px 0 #B0BEC5}
+.kb-key.correct{background:var(--green-light);border-color:var(--green);animation:none}
+.kb-key.wrong{background:var(--red-light);border-color:var(--red);animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.romaji-table-float{position:absolute;right:8px;bottom:8px;background:rgba(120,144,156,.7);color:#FFF;border:none;border-radius:8px;padding:4px 10px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.romaji-table-float:active{background:rgba(120,144,156,1)}
 
-/* Nav area: big buttons */
-.nav-area {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 5px 8px; flex-shrink: 0; gap: 8px;
-}
-.nav-btn {
-  background: var(--blue); color: #FFF; border: none; border-radius: 14px;
-  padding: 14px 0; font-family: inherit; font-size: 18px; font-weight: 900;
-  cursor: pointer; box-shadow: 0 4px 0 var(--blue-dark);
-  flex: 1; max-width: 160px; text-align: center;
-}
-.nav-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--blue-dark); }
-.nav-btn:disabled { opacity: 0.3; cursor: default; }
-.romaji-table-btn {
-  background: #78909C; color: #FFF; border: none; border-radius: 14px;
-  padding: 14px 14px; font-family: inherit; font-size: 14px; font-weight: 800;
-  cursor: pointer; box-shadow: 0 4px 0 #546E7A; white-space: nowrap;
-}
-.romaji-table-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #546E7A; }
+/* ===== COUNTRY LIST MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:12px}
+.modal-overlay.show{display:flex}
+.modal-content{background:#FFF;border-radius:20px;padding:16px;max-width:650px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.modal-content h2{text-align:center;font-size:20px;margin-bottom:10px;color:var(--blue-dark)}
+.modal-close{display:block;margin:0 auto 10px;padding:8px 28px;background:var(--blue);color:#FFF;border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 var(--blue-dark)}
+.modal-close:active{transform:translateY(2px)}
 
-/* Keyboard: no number row, bigger keys */
-.keyboard {
-  padding: 8px 4px 14px; background: #CFD8DC;
-  border-top: 2px solid #B0BEC5; flex-shrink: 0;
-}
-.kb-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
-.kb-key {
-  display: flex; align-items: center; justify-content: center;
-  background: var(--white); border: 1px solid #B0BEC5; border-radius: 8px;
-  font-family: 'Courier New', monospace;
-  font-size: clamp(18px, 4.5vw, 26px); font-weight: 700;
-  min-width: clamp(30px, 8.5vw, 50px); height: clamp(48px, 12vw, 64px);
-  cursor: pointer; box-shadow: 0 3px 0 #B0BEC5;
-  -webkit-tap-highlight-color: transparent;
-}
-.kb-key:active { transform: translateY(2px); box-shadow: 0 1px 0 #B0BEC5; }
-.kb-key.highlight {
-  background: var(--orange); color: #FFF; border-color: var(--orange-dark);
-  box-shadow: 0 3px 0 var(--orange-dark);
-  animation: keyPulse 0.6s ease-in-out infinite;
-}
-@keyframes keyPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
-.kb-key.correct { background: var(--green-light); border-color: var(--green); animation: none; }
-.kb-key.wrong { background: var(--red-light); border-color: var(--red); animation: shake 0.3s; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+/* Country list grid */
+.country-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.country-card{background:#F5F5F5;border-radius:10px;padding:8px 6px;text-align:center;cursor:pointer;transition:background .1s;border:2px solid transparent}
+.country-card:active{background:var(--blue-light)}
+.country-card .cc-flag{font-size:28px}
+.country-card .cc-name{font-size:11px;font-weight:700;line-height:1.2;margin-top:2px;word-break:keep-all}
+.country-card.done{border-color:var(--green);background:var(--green-light)}
 
-/* ============ ROMAJI TABLE MODAL ============ */
-.modal-overlay {
-  display: none; position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.5); align-items: center; justify-content: center; padding: 16px;
-}
-.modal-overlay.show { display: flex; }
-.modal-content {
-  background: #FFF; border-radius: 20px; padding: 16px;
-  max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-}
-.modal-content h2 { text-align: center; font-size: 22px; margin-bottom: 12px; color: var(--blue-dark); }
-.modal-close {
-  display: block; margin: 0 auto 10px; padding: 10px 30px;
-  background: var(--blue); color: #FFF; border: none; border-radius: 12px;
-  font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer;
-  box-shadow: 0 3px 0 var(--blue-dark);
-}
-.modal-close:active { transform: translateY(2px); }
-.romaji-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.romaji-table th { background: var(--blue); color: #FFF; padding: 6px 4px; font-weight: 800; font-size: 13px; }
-.romaji-table td { padding: 5px 4px; text-align: center; border: 1px solid #E0E0E0; font-weight: 700; }
-.romaji-table tr:nth-child(even) td { background: #F5F5F5; }
-.kana { font-size: 16px; }
-.roma { font-size: 12px; color: var(--orange-dark); font-family: 'Courier New', monospace; }
+/* Romaji table */
+.romaji-table{width:100%;border-collapse:collapse;font-size:13px}
+.romaji-table th{background:var(--blue);color:#FFF;padding:5px 3px;font-weight:800;font-size:12px}
+.romaji-table td{padding:4px 3px;text-align:center;border:1px solid #E0E0E0;font-weight:700}
+.romaji-table tr:nth-child(even) td{background:#F5F5F5}
+.kana{font-size:15px}
+.roma{font-size:11px;color:var(--orange-dark);font-family:'Courier New',monospace}
 
-/* ============ RESULT ============ */
-#result-screen {
-  display: none; flex-direction: column; align-items: center; justify-content: center;
-  height: 100vh; gap: 20px; padding: 20px;
-  background: linear-gradient(135deg, #1B5E20 0%, #43A047 50%, #81C784 100%);
-}
-#result-screen h1 { font-size: clamp(28px, 6vw, 42px); color: #FFF; text-align: center; }
-.result-card {
-  background: rgba(255,255,255,0.95); border-radius: 20px; padding: 24px 32px;
-  min-width: 260px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-}
-.result-card .stat { font-size: 20px; margin: 10px 0; font-weight: 700; }
-.result-card .stat span { font-size: 32px; font-weight: 900; }
-.result-btn {
-  padding: 14px 32px; border: none; border-radius: 14px; font-family: inherit;
-  font-size: 20px; font-weight: 800; cursor: pointer; color: #FFF;
-  background: var(--blue); box-shadow: 0 4px 0 var(--blue-dark);
-}
-.result-btn:active { transform: translateY(3px); }
+/* ===== SOUND SETTINGS MODAL ===== */
+.sound-settings{display:flex;flex-direction:column;gap:14px;padding:10px 0}
+.sound-row{display:flex;align-items:center;justify-content:space-between;padding:0 10px}
+.sound-row label{font-size:16px;font-weight:700}
+.toggle-switch{position:relative;width:52px;height:28px;cursor:pointer}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#ccc;border-radius:28px;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:22px;height:22px;left:3px;bottom:3px;background:#FFF;border-radius:50%;transition:.2s}
+.toggle-switch input:checked+.toggle-slider{background:var(--green)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(24px)}
 
-.celebration { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
-.confetti {
-  position: absolute; width: 10px; height: 10px; border-radius: 2px;
-  animation: confettiFall 1s ease-in forwards;
-}
-@keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+/* ===== RESULT ===== */
+#result-screen{align-items:center;justify-content:center;gap:20px;padding:20px;background:linear-gradient(135deg,#1B5E20 0%,#43A047 50%,#81C784 100%)}
+#result-screen h1{font-size:clamp(28px,6vw,42px);color:#FFF;text-align:center}
+.result-card{background:rgba(255,255,255,.95);border-radius:20px;padding:24px 32px;min-width:260px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+.result-card .stat{font-size:20px;margin:10px 0;font-weight:700}
+.result-card .stat span{font-size:32px;font-weight:900}
+.result-btn{padding:14px 32px;border:none;border-radius:14px;font-family:inherit;font-size:20px;font-weight:800;cursor:pointer;color:#FFF;background:var(--blue);box-shadow:0 4px 0 var(--blue-dark)}
+.result-btn:active{transform:translateY(3px)}
+
+.celebration{position:fixed;inset:0;pointer-events:none;z-index:100}
+.confetti{position:absolute;width:10px;height:10px;border-radius:2px;animation:confettiFall 1s ease-in forwards}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 </style>
 </head>
 <body>
 
-<div id="title-screen">
+<!-- ===== TITLE ===== -->
+<div id="title-screen" class="screen active">
   <div class="globe-emoji">🌍</div>
   <h1>ローマ字れんしゅう<br>〜国の名前〜</h1>
   <p class="subtitle">勇誠くんのタイピングれんしゅう</p>
-  <div class="course-buttons">
-    <button class="course-btn btn-lower" onclick="startGame('lower')">abc<br><span style="font-size:0.6em">小文字コース</span></button>
-    <button class="course-btn btn-upper" onclick="startGame('upper')">ABC<br><span style="font-size:0.6em">大文字コース</span></button>
+  <div class="title-buttons">
+    <div class="title-row">
+      <button class="course-btn btn-lower" onclick="startGame('lower')">abc<br><span style="font-size:.55em">小文字コース</span></button>
+      <button class="course-btn btn-upper" onclick="startGame('upper')">ABC<br><span style="font-size:.55em">大文字コース</span></button>
+    </div>
+    <div class="title-row">
+      <button class="title-sub-btn btn-list" onclick="openCountryList()">📋 国いちらん</button>
+      <button class="title-sub-btn btn-sound" onclick="openSoundSettings()">🔊 サウンド設定</button>
+    </div>
   </div>
 </div>
 
-<div id="game-screen">
+<!-- ===== GAME ===== -->
+<div id="game-screen" class="screen">
   <div class="top-bar">
     <button class="home-btn" onclick="goHome()">🏠 もどる</button>
-    <span class="course-label" id="course-label">小文字コース</span>
+    <div class="case-toggle">
+      <button id="toggle-lower" class="active" onclick="switchCase('lower')">abc</button>
+      <button id="toggle-upper" onclick="switchCase('upper')">ABC</button>
+    </div>
     <span class="progress" id="progress">1 / 56</span>
   </div>
-  <div class="score-bar">
-    <div class="score-item">入力: <span class="score-badge badge-input" id="input-count">0</span></div>
-    <div class="score-item">ミス: <span class="score-badge badge-miss" id="miss-count">0</span></div>
-  </div>
+
   <div class="display-area">
-    <div class="country-row">
-      <div class="country-info">
-        <div class="country-name" id="country-name">日本</div>
-        <button class="hint-btn" id="hint-btn" onclick="toggleHint()">💡 ヒント</button>
-        <div class="hint-content" id="hint-content" style="display:none"></div>
-      </div>
-      <div class="flag-display" id="flag-display">🇯🇵</div>
+    <div class="col-flag" id="flag-display">🇯🇵</div>
+    <div class="col-name">
+      <div class="country-name" id="country-name">日本</div>
     </div>
-    <div class="romaji-box">
-      <div class="romaji-text" id="romaji-display"></div>
+    <div class="col-romaji">
+      <div class="romaji-box">
+        <div class="romaji-text" id="romaji-display"></div>
+      </div>
     </div>
   </div>
+
   <div class="nav-area">
     <button class="nav-btn" id="prev-btn" onclick="prevCountry()">◀ 前</button>
-    <button class="romaji-table-btn" onclick="openRomajiTable()">📖 ローマ字表</button>
     <button class="nav-btn" id="next-btn" onclick="nextCountry()">次 ▶</button>
   </div>
-  <div class="keyboard" id="keyboard"></div>
+
+  <div class="keyboard-wrap">
+    <div id="keyboard"></div>
+    <button class="romaji-table-float" onclick="openRomajiTable()">📖 ローマ字表</button>
+  </div>
 </div>
 
-<div id="result-screen">
+<!-- ===== RESULT ===== -->
+<div id="result-screen" class="screen">
   <h1>🎉 おつかれさま！</h1>
   <div class="result-card">
-    <div class="stat">入力数: <span id="result-input" style="color:#FF9800">0</span></div>
-    <div class="stat">ミス数: <span id="result-miss" style="color:#F44336">0</span></div>
-    <div class="stat">正確さ: <span id="result-accuracy" style="color:#4CAF50">100%</span></div>
+    <div class="stat">全 <span id="result-total" style="color:var(--blue)">56</span> 問クリア！</div>
   </div>
   <button class="result-btn" onclick="goHome()">🏠 タイトルにもどる</button>
 </div>
 
+<!-- ===== COUNTRY LIST MODAL ===== -->
+<div class="modal-overlay" id="country-list-modal">
+  <div class="modal-content">
+    <h2>📋 国いちらん</h2>
+    <button class="modal-close" onclick="closeCountryList()">✕ とじる</button>
+    <div class="country-grid" id="country-grid"></div>
+  </div>
+</div>
+
+<!-- ===== SOUND SETTINGS MODAL ===== -->
+<div class="modal-overlay" id="sound-modal">
+  <div class="modal-content">
+    <h2>🔊 サウンド設定</h2>
+    <button class="modal-close" onclick="closeSoundSettings()">✕ とじる</button>
+    <div class="sound-settings">
+      <div class="sound-row">
+        <label>🔔 効果音（せいかい・ミス）</label>
+        <label class="toggle-switch"><input type="checkbox" id="se-toggle" checked onchange="updateSoundSettings()"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="sound-row">
+        <label>🎵 BGM</label>
+        <label class="toggle-switch"><input type="checkbox" id="bgm-toggle" onchange="updateSoundSettings()"><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ROMAJI TABLE MODAL ===== -->
 <div class="modal-overlay" id="romaji-modal">
   <div class="modal-content">
     <h2>📖 ローマ字表</h2>
@@ -284,24 +224,20 @@ html, body {
       <tr><th>ラ行</th><td><span class="kana">ラ</span><br><span class="roma">ra</span></td><td><span class="kana">リ</span><br><span class="roma">ri</span></td><td><span class="kana">ル</span><br><span class="roma">ru</span></td><td><span class="kana">レ</span><br><span class="roma">re</span></td><td><span class="kana">ロ</span><br><span class="roma">ro</span></td></tr>
       <tr><th>ワ行</th><td><span class="kana">ワ</span><br><span class="roma">wa</span></td><td></td><td></td><td></td><td><span class="kana">ヲ</span><br><span class="roma">wo</span></td></tr>
       <tr><th>ン</th><td colspan="5"><span class="kana">ン</span> → <span class="roma">n</span></td></tr>
-      <tr><th colspan="6" style="background:#E65100;padding:8px">だくおん</th></tr>
+      <tr><th colspan="6" style="background:#E65100;padding:6px">だくおん</th></tr>
       <tr><th>ガ行</th><td><span class="kana">ガ</span><br><span class="roma">ga</span></td><td><span class="kana">ギ</span><br><span class="roma">gi</span></td><td><span class="kana">グ</span><br><span class="roma">gu</span></td><td><span class="kana">ゲ</span><br><span class="roma">ge</span></td><td><span class="kana">ゴ</span><br><span class="roma">go</span></td></tr>
       <tr><th>ザ行</th><td><span class="kana">ザ</span><br><span class="roma">za</span></td><td><span class="kana">ジ</span><br><span class="roma">ji</span></td><td><span class="kana">ズ</span><br><span class="roma">zu</span></td><td><span class="kana">ゼ</span><br><span class="roma">ze</span></td><td><span class="kana">ゾ</span><br><span class="roma">zo</span></td></tr>
       <tr><th>ダ行</th><td><span class="kana">ダ</span><br><span class="roma">da</span></td><td><span class="kana">ヂ</span><br><span class="roma">di</span></td><td><span class="kana">ヅ</span><br><span class="roma">du</span></td><td><span class="kana">デ</span><br><span class="roma">de</span></td><td><span class="kana">ド</span><br><span class="roma">do</span></td></tr>
       <tr><th>バ行</th><td><span class="kana">バ</span><br><span class="roma">ba</span></td><td><span class="kana">ビ</span><br><span class="roma">bi</span></td><td><span class="kana">ブ</span><br><span class="roma">bu</span></td><td><span class="kana">ベ</span><br><span class="roma">be</span></td><td><span class="kana">ボ</span><br><span class="roma">bo</span></td></tr>
       <tr><th>パ行</th><td><span class="kana">パ</span><br><span class="roma">pa</span></td><td><span class="kana">ピ</span><br><span class="roma">pi</span></td><td><span class="kana">プ</span><br><span class="roma">pu</span></td><td><span class="kana">ペ</span><br><span class="roma">pe</span></td><td><span class="kana">ポ</span><br><span class="roma">po</span></td></tr>
-      <tr><th colspan="6" style="background:#E65100;padding:8px">ようおん</th></tr>
-      <tr><th>キャ行</th><td><span class="kana">キャ</span><br><span class="roma">kya</span></td><td></td><td><span class="kana">キュ</span><br><span class="roma">kyu</span></td><td></td><td><span class="kana">キョ</span><br><span class="roma">kyo</span></td></tr>
-      <tr><th>シャ行</th><td><span class="kana">シャ</span><br><span class="roma">sha</span></td><td></td><td><span class="kana">シュ</span><br><span class="roma">shu</span></td><td></td><td><span class="kana">ショ</span><br><span class="roma">sho</span></td></tr>
-      <tr><th>チャ行</th><td><span class="kana">チャ</span><br><span class="roma">cha</span></td><td></td><td><span class="kana">チュ</span><br><span class="roma">chu</span></td><td></td><td><span class="kana">チョ</span><br><span class="roma">cho</span></td></tr>
-      <tr><th>ニャ行</th><td><span class="kana">ニャ</span><br><span class="roma">nya</span></td><td></td><td><span class="kana">ニュ</span><br><span class="roma">nyu</span></td><td></td><td><span class="kana">ニョ</span><br><span class="roma">nyo</span></td></tr>
-      <tr><th>ヒャ行</th><td><span class="kana">ヒャ</span><br><span class="roma">hya</span></td><td></td><td><span class="kana">ヒュ</span><br><span class="roma">hyu</span></td><td></td><td><span class="kana">ヒョ</span><br><span class="roma">hyo</span></td></tr>
-      <tr><th>ミャ行</th><td><span class="kana">ミャ</span><br><span class="roma">mya</span></td><td></td><td><span class="kana">ミュ</span><br><span class="roma">myu</span></td><td></td><td><span class="kana">ミョ</span><br><span class="roma">myo</span></td></tr>
-      <tr><th>リャ行</th><td><span class="kana">リャ</span><br><span class="roma">rya</span></td><td></td><td><span class="kana">リュ</span><br><span class="roma">ryu</span></td><td></td><td><span class="kana">リョ</span><br><span class="roma">ryo</span></td></tr>
-      <tr><th>ジャ行</th><td><span class="kana">ジャ</span><br><span class="roma">ja</span></td><td></td><td><span class="kana">ジュ</span><br><span class="roma">ju</span></td><td></td><td><span class="kana">ジョ</span><br><span class="roma">jo</span></td></tr>
-      <tr><th colspan="6" style="background:#E65100;padding:8px">とくべつ</th></tr>
-      <tr><th>ッ</th><td colspan="5"><span class="kana">ッ（そくおん）</span><br><span class="roma">つぎの子音を2回書く　例: ニッポン → nippon</span></td></tr>
-      <tr><th>ー</th><td colspan="5"><span class="kana">ー（ちょうおん）</span><br><span class="roma">前のぼいんをくりかえす　例: トーキョー → toukyou</span></td></tr>
+      <tr><th colspan="6" style="background:#E65100;padding:6px">ようおん</th></tr>
+      <tr><th>キャ</th><td><span class="kana">キャ</span><br><span class="roma">kya</span></td><td></td><td><span class="kana">キュ</span><br><span class="roma">kyu</span></td><td></td><td><span class="kana">キョ</span><br><span class="roma">kyo</span></td></tr>
+      <tr><th>シャ</th><td><span class="kana">シャ</span><br><span class="roma">sha</span></td><td></td><td><span class="kana">シュ</span><br><span class="roma">shu</span></td><td></td><td><span class="kana">ショ</span><br><span class="roma">sho</span></td></tr>
+      <tr><th>チャ</th><td><span class="kana">チャ</span><br><span class="roma">cha</span></td><td></td><td><span class="kana">チュ</span><br><span class="roma">chu</span></td><td></td><td><span class="kana">チョ</span><br><span class="roma">cho</span></td></tr>
+      <tr><th>ジャ</th><td><span class="kana">ジャ</span><br><span class="roma">ja</span></td><td></td><td><span class="kana">ジュ</span><br><span class="roma">ju</span></td><td></td><td><span class="kana">ジョ</span><br><span class="roma">jo</span></td></tr>
+      <tr><th colspan="6" style="background:#E65100;padding:6px">とくべつ</th></tr>
+      <tr><th>ッ</th><td colspan="5"><span class="kana">ッ</span> → <span class="roma">つぎの子音を2回　例: ニッポン→nippon</span></td></tr>
+      <tr><th>ー</th><td colspan="5"><span class="kana">ー</span> → <span class="roma">前のぼいんをくりかえす　例: トーキョー→toukyou</span></td></tr>
     </table>
   </div>
 </div>
@@ -309,102 +245,208 @@ html, body {
 <div class="celebration" id="celebration"></div>
 
 <script>
-const COUNTRIES = [
-  { name: '日本', reading: 'ニホン', romaji: 'nihon', flag: '🇯🇵' },
-  { name: 'イギリス', reading: 'イギリス', romaji: 'igirisu', flag: '🇬🇧' },
-  { name: 'ポーランド', reading: 'ポーランド', romaji: 'poorando', flag: '🇵🇱' },
-  { name: 'パキスタン', reading: 'パキスタン', romaji: 'pakisutan', flag: '🇵🇰' },
-  { name: 'アイルランド', reading: 'アイルランド', romaji: 'airurando', flag: '🇮🇪' },
-  { name: 'ベネズエラ', reading: 'ベネズエラ', romaji: 'benezuera', flag: '🇻🇪' },
-  { name: 'トルコ', reading: 'トルコ', romaji: 'toruko', flag: '🇹🇷' },
-  { name: 'エチオピア', reading: 'エチオピア', romaji: 'echiopia', flag: '🇪🇹' },
-  { name: 'ソマリア', reading: 'ソマリア', romaji: 'somaria', flag: '🇸🇴' },
-  { name: 'デンマーク', reading: 'デンマーク', romaji: 'denmaaku', flag: '🇩🇰' },
-  { name: 'メキシコ', reading: 'メキシコ', romaji: 'mekishiko', flag: '🇲🇽' },
-  { name: 'コロンビア', reading: 'コロンビア', romaji: 'koronbia', flag: '🇨🇴' },
-  { name: 'キューバ', reading: 'キューバ', romaji: 'kyuuba', flag: '🇨🇺' },
-  { name: 'ウクライナ', reading: 'ウクライナ', romaji: 'ukuraina', flag: '🇺🇦' },
-  { name: 'チャド', reading: 'チャド', romaji: 'chado', flag: '🇹🇩' },
-  { name: 'カザフスタン', reading: 'カザフスタン', romaji: 'kazafusutan', flag: '🇰🇿' },
-  { name: 'ベラルーシ', reading: 'ベラルーシ', romaji: 'beraruushi', flag: '🇧🇾' },
-  { name: 'アルバニア', reading: 'アルバニア', romaji: 'arubania', flag: '🇦🇱' },
-  { name: 'キプロス', reading: 'キプロス', romaji: 'kipurosu', flag: '🇨🇾' },
-  { name: 'イラン', reading: 'イラン', romaji: 'iran', flag: '🇮🇷' },
-  { name: 'グリーンランド', reading: 'グリーンランド', romaji: 'guriinrando', flag: '🇬🇱' },
-  { name: 'マダガスカル', reading: 'マダガスカル', romaji: 'madagasukaru', flag: '🇲🇬' },
-  { name: 'カナダ', reading: 'カナダ', romaji: 'kanada', flag: '🇨🇦' },
-  { name: '台湾', reading: 'タイワン', romaji: 'taiwan', flag: '🇹🇼' },
-  { name: 'モンゴル', reading: 'モンゴル', romaji: 'mongoru', flag: '🇲🇳' },
-  { name: '北朝鮮', reading: 'キタチョウセン', romaji: 'kitachousen', flag: '🇰🇵' },
-  { name: 'コソボ', reading: 'コソボ', romaji: 'kosobo', flag: '🇽🇰' },
-  { name: 'スカンディナビア', reading: 'スカンディナビア', romaji: 'sukandinabia', flag: '🏔️' },
-  { name: '中国', reading: 'チュウゴク', romaji: 'chuugoku', flag: '🇨🇳' },
-  { name: 'マジャヒット帝国', reading: 'マジャヒットテイコク', romaji: 'majahittoteikoku', flag: '🏛️' },
-  { name: '大ルーマニア', reading: 'ダイルーマニア', romaji: 'dairuumania', flag: '🏛️' },
-  { name: 'プロイセン', reading: 'プロイセン', romaji: 'puroisen', flag: '🏛️' },
-  { name: 'ポーランド・リトアニア共和国', reading: 'ポーランドリトアニアキョウワコク', romaji: 'poorandoritoaniakyouwakoku', flag: '🏛️' },
-  { name: 'ロシア', reading: 'ロシア', romaji: 'roshia', flag: '🇷🇺' },
-  { name: 'オーストリア＝ハンガリー二重帝国', reading: 'オーストリアハンガリーニジュウテイコク', romaji: 'oosutoriahangariinijuuteikoku', flag: '🏛️' },
-  { name: '神聖ローマ帝国', reading: 'シンセイローマテイコク', romaji: 'shinseiroomateikoku', flag: '🏛️' },
-  { name: '清', reading: 'シン', romaji: 'shin', flag: '🏯' },
-  { name: '朝鮮', reading: 'チョウセン', romaji: 'chousen', flag: '🏛️' },
-  { name: 'ＥＵ', reading: 'イーユー', romaji: 'iiyuu', flag: '🇪🇺' },
-  { name: 'アメリカ', reading: 'アメリカ', romaji: 'amerika', flag: '🇺🇸' },
-  { name: 'チェコスロバキア', reading: 'チェコスロバキア', romaji: 'chekosurobakia', flag: '🏛️' },
-  { name: 'ユーゴスラビア', reading: 'ユーゴスラビア', romaji: 'yuugosurabia', flag: '🏛️' },
-  { name: 'アフリカ連合', reading: 'アフリカレンゴウ', romaji: 'afurikarengou', flag: '🌍' },
-  { name: 'ペルシア帝国', reading: 'ペルシアテイコク', romaji: 'perushiateikoku', flag: '🏛️' },
-  { name: 'オスマン帝国', reading: 'オスマンテイコク', romaji: 'osumanteikoku', flag: '🏛️' },
-  { name: 'バチカン', reading: 'バチカン', romaji: 'bachikan', flag: '🇻🇦' },
-  { name: '南アメリカ', reading: 'ミナミアメリカ', romaji: 'minamiamerika', flag: '🌎' },
-  { name: 'ナトー', reading: 'ナトー', romaji: 'natoo', flag: '🛡️' },
-  { name: 'ソビエト連邦', reading: 'ソビエトレンポウ', romaji: 'sobietorenpou', flag: '🏛️' },
-  { name: 'ローマ帝国', reading: 'ローマテイコク', romaji: 'roomateikoku', flag: '🏛️' },
-  { name: 'ロシア帝国', reading: 'ロシアテイコク', romaji: 'roshiateikoku', flag: '🏛️' },
-  { name: 'アトランティス', reading: 'アトランティス', romaji: 'atorantisu', flag: '🔱' },
-  { name: 'モンゴル帝国', reading: 'モンゴルテイコク', romaji: 'mongoruteikoku', flag: '🏛️' },
-  { name: 'スペイン帝国', reading: 'スペインテイコク', romaji: 'supeinteikoku', flag: '🏛️' },
-  { name: '大英帝国', reading: 'ダイエイテイコク', romaji: 'daieiteikoku', flag: '🏛️' },
-  { name: 'カタルゴ', reading: 'カタルゴ', romaji: 'katarugo', flag: '🏛️' },
+// ===== DATA =====
+const COUNTRIES=[
+{name:'日本',reading:'ニホン',romaji:'nihon',flag:'🇯🇵'},
+{name:'イギリス',reading:'イギリス',romaji:'igirisu',flag:'🇬🇧'},
+{name:'ポーランド',reading:'ポーランド',romaji:'poorando',flag:'🇵🇱'},
+{name:'パキスタン',reading:'パキスタン',romaji:'pakisutan',flag:'🇵🇰'},
+{name:'アイルランド',reading:'アイルランド',romaji:'airurando',flag:'🇮🇪'},
+{name:'ベネズエラ',reading:'ベネズエラ',romaji:'benezuera',flag:'🇻🇪'},
+{name:'トルコ',reading:'トルコ',romaji:'toruko',flag:'🇹🇷'},
+{name:'エチオピア',reading:'エチオピア',romaji:'echiopia',flag:'🇪🇹'},
+{name:'ソマリア',reading:'ソマリア',romaji:'somaria',flag:'🇸🇴'},
+{name:'デンマーク',reading:'デンマーク',romaji:'denmaaku',flag:'🇩🇰'},
+{name:'メキシコ',reading:'メキシコ',romaji:'mekishiko',flag:'🇲🇽'},
+{name:'コロンビア',reading:'コロンビア',romaji:'koronbia',flag:'🇨🇴'},
+{name:'キューバ',reading:'キューバ',romaji:'kyuuba',flag:'🇨🇺'},
+{name:'ウクライナ',reading:'ウクライナ',romaji:'ukuraina',flag:'🇺🇦'},
+{name:'チャド',reading:'チャド',romaji:'chado',flag:'🇹🇩'},
+{name:'カザフスタン',reading:'カザフスタン',romaji:'kazafusutan',flag:'🇰🇿'},
+{name:'ベラルーシ',reading:'ベラルーシ',romaji:'beraruushi',flag:'🇧🇾'},
+{name:'アルバニア',reading:'アルバニア',romaji:'arubania',flag:'🇦🇱'},
+{name:'キプロス',reading:'キプロス',romaji:'kipurosu',flag:'🇨🇾'},
+{name:'イラン',reading:'イラン',romaji:'iran',flag:'🇮🇷'},
+{name:'グリーンランド',reading:'グリーンランド',romaji:'guriinrando',flag:'🇬🇱'},
+{name:'マダガスカル',reading:'マダガスカル',romaji:'madagasukaru',flag:'🇲🇬'},
+{name:'カナダ',reading:'カナダ',romaji:'kanada',flag:'🇨🇦'},
+{name:'台湾',reading:'タイワン',romaji:'taiwan',flag:'🇹🇼'},
+{name:'モンゴル',reading:'モンゴル',romaji:'mongoru',flag:'🇲🇳'},
+{name:'北朝鮮',reading:'キタチョウセン',romaji:'kitachousen',flag:'🇰🇵'},
+{name:'コソボ',reading:'コソボ',romaji:'kosobo',flag:'🇽🇰'},
+{name:'スカンディナビア',reading:'スカンディナビア',romaji:'sukandinabia',flag:'🏔️'},
+{name:'中国',reading:'チュウゴク',romaji:'chuugoku',flag:'🇨🇳'},
+{name:'マジャヒット帝国',reading:'マジャヒットテイコク',romaji:'majahittoteikoku',flag:'🏛️'},
+{name:'大ルーマニア',reading:'ダイルーマニア',romaji:'dairuumania',flag:'🏛️'},
+{name:'プロイセン',reading:'プロイセン',romaji:'puroisen',flag:'🏛️'},
+{name:'ポーランド・リトアニア共和国',reading:'ポーランドリトアニアキョウワコク',romaji:'poorandoritoaniakyouwakoku',flag:'🏛️'},
+{name:'ロシア',reading:'ロシア',romaji:'roshia',flag:'🇷🇺'},
+{name:'オーストリア＝ハンガリー二重帝国',reading:'オーストリアハンガリーニジュウテイコク',romaji:'oosutoriahangariinijuuteikoku',flag:'🏛️'},
+{name:'神聖ローマ帝国',reading:'シンセイローマテイコク',romaji:'shinseiroomateikoku',flag:'🏛️'},
+{name:'清',reading:'シン',romaji:'shin',flag:'🏯'},
+{name:'朝鮮',reading:'チョウセン',romaji:'chousen',flag:'🏛️'},
+{name:'ＥＵ',reading:'イーユー',romaji:'iiyuu',flag:'🇪🇺'},
+{name:'アメリカ',reading:'アメリカ',romaji:'amerika',flag:'🇺🇸'},
+{name:'チェコスロバキア',reading:'チェコスロバキア',romaji:'chekosurobakia',flag:'🏛️'},
+{name:'ユーゴスラビア',reading:'ユーゴスラビア',romaji:'yuugosurabia',flag:'🏛️'},
+{name:'アフリカ連合',reading:'アフリカレンゴウ',romaji:'afurikarengou',flag:'🌍'},
+{name:'ペルシア帝国',reading:'ペルシアテイコク',romaji:'perushiateikoku',flag:'🏛️'},
+{name:'オスマン帝国',reading:'オスマンテイコク',romaji:'osumanteikoku',flag:'🏛️'},
+{name:'バチカン',reading:'バチカン',romaji:'bachikan',flag:'🇻🇦'},
+{name:'南アメリカ',reading:'ミナミアメリカ',romaji:'minamiamerika',flag:'🌎'},
+{name:'ナトー',reading:'ナトー',romaji:'natoo',flag:'🛡️'},
+{name:'ソビエト連邦',reading:'ソビエトレンポウ',romaji:'sobietorenpou',flag:'🏛️'},
+{name:'ローマ帝国',reading:'ローマテイコク',romaji:'roomateikoku',flag:'🏛️'},
+{name:'ロシア帝国',reading:'ロシアテイコク',romaji:'roshiateikoku',flag:'🏛️'},
+{name:'アトランティス',reading:'アトランティス',romaji:'atorantisu',flag:'🔱'},
+{name:'モンゴル帝国',reading:'モンゴルテイコク',romaji:'mongoruteikoku',flag:'🏛️'},
+{name:'スペイン帝国',reading:'スペインテイコク',romaji:'supeinteikoku',flag:'🏛️'},
+{name:'大英帝国',reading:'ダイエイテイコク',romaji:'daieiteikoku',flag:'🏛️'},
+{name:'カタルゴ',reading:'カタルゴ',romaji:'katarugo',flag:'🏛️'},
 ];
 
-const KB_ROWS = [
-  ['Q','W','E','R','T','Y','U','I','O','P'],
-  ['A','S','D','F','G','H','J','K','L'],
-  ['Z','X','C','V','B','N','M'],
+const KB_ROWS=[
+['Q','W','E','R','T','Y','U','I','O','P'],
+['A','S','D','F','G','H','J','K','L'],
+['Z','X','C','V','B','N','M'],
 ];
 
-let mode='lower', currentIndex=0, typedPos=0, inputCount=0, missCount=0, completed=[], keyFeedbackTimer=null, hintVisible=false;
+// ===== STATE =====
+let mode='lower',currentIndex=0,typedPos=0,completed=[],keyTimer=null;
+let settings={se:true,bgm:false};
+let audioCtx=null;
+let bgmOsc=null,bgmGain=null,bgmInterval=null;
 
-function startGame(m) {
-  mode=m; currentIndex=0; typedPos=0; inputCount=0; missCount=0;
-  completed=new Array(COUNTRIES.length).fill(false); hintVisible=false;
-  document.getElementById('title-screen').style.display='none';
-  document.getElementById('result-screen').style.display='none';
-  document.getElementById('game-screen').style.display='flex';
-  document.getElementById('course-label').textContent=mode==='lower'?'小文字コース abc':'大文字コース ABC';
-  buildKeyboard(); updateDisplay(); updateScores();
+// ===== AUDIO =====
+function getAudioCtx(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
 }
-function goHome() {
-  document.getElementById('game-screen').style.display='none';
-  document.getElementById('result-screen').style.display='none';
-  document.getElementById('title-screen').style.display='flex';
-}
-function toggleHint() {
-  hintVisible=!hintVisible;
-  const el=document.getElementById('hint-content');
-  if(hintVisible){el.style.display='block';el.textContent=COUNTRIES[currentIndex].reading;}
-  else{el.style.display='none';}
-}
-function openRomajiTable(){document.getElementById('romaji-modal').classList.add('show');}
-function closeRomajiTable(){document.getElementById('romaji-modal').classList.remove('show');}
 
-function buildKeyboard() {
-  const kb=document.getElementById('keyboard'); kb.innerHTML='';
+function playCorrect(){
+  if(!settings.se) return;
+  try{
+    const ctx=getAudioCtx();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.setValueAtTime(880,ctx.currentTime);
+    o.frequency.setValueAtTime(1100,ctx.currentTime+0.08);
+    o.type='sine';
+    g.gain.setValueAtTime(0.25,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.25);
+    o.start();o.stop(ctx.currentTime+0.25);
+  }catch(e){}
+}
+
+function playWrong(){
+  if(!settings.se) return;
+  try{
+    const ctx=getAudioCtx();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.value=200;o.type='square';
+    g.gain.setValueAtTime(0.15,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.2);
+    o.start();o.stop(ctx.currentTime+0.2);
+  }catch(e){}
+}
+
+function playComplete(){
+  if(!settings.se) return;
+  try{
+    const ctx=getAudioCtx();
+    const notes=[523,659,784,1047];
+    notes.forEach((f,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value=f;o.type='sine';
+      g.gain.setValueAtTime(0.2,ctx.currentTime+i*0.1);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.1+0.3);
+      o.start(ctx.currentTime+i*0.1);o.stop(ctx.currentTime+i*0.1+0.3);
+    });
+  }catch(e){}
+}
+
+// BGM: simple cheerful loop
+const BGM_MELODY=[
+  {f:523,d:0.25},{f:587,d:0.25},{f:659,d:0.25},{f:784,d:0.5},
+  {f:659,d:0.25},{f:784,d:0.25},{f:880,d:0.5},{f:784,d:0.25},
+  {f:659,d:0.25},{f:587,d:0.25},{f:523,d:0.5},{f:587,d:0.25},
+  {f:659,d:0.5},{f:523,d:0.5},{f:0,d:0.25},
+];
+
+function startBGM(){
+  if(!settings.bgm) return;
+  stopBGM();
+  try{
+    const ctx=getAudioCtx();
+    let noteIdx=0;
+    function playNext(){
+      if(!settings.bgm){stopBGM();return;}
+      const note=BGM_MELODY[noteIdx%BGM_MELODY.length];
+      if(note.f>0){
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.frequency.value=note.f;o.type='triangle';
+        g.gain.setValueAtTime(0.06,ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+note.d*0.9);
+        o.start();o.stop(ctx.currentTime+note.d);
+      }
+      noteIdx++;
+      bgmInterval=setTimeout(playNext,note.d*1000);
+    }
+    playNext();
+  }catch(e){}
+}
+
+function stopBGM(){
+  if(bgmInterval){clearTimeout(bgmInterval);bgmInterval=null;}
+}
+
+function updateSoundSettings(){
+  settings.se=document.getElementById('se-toggle').checked;
+  settings.bgm=document.getElementById('bgm-toggle').checked;
+  if(settings.bgm&&document.getElementById('game-screen').classList.contains('active')) startBGM();
+  if(!settings.bgm) stopBGM();
+}
+
+// ===== SCREENS =====
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame(m){
+  mode=m;currentIndex=0;typedPos=0;
+  completed=new Array(COUNTRIES.length).fill(false);
+  showScreen('game-screen');
+  updateCaseToggle();buildKeyboard();updateDisplay();
+  if(settings.bgm) startBGM();
+}
+
+function goHome(){
+  stopBGM();
+  showScreen('title-screen');
+}
+
+function switchCase(m){
+  mode=m;
+  updateCaseToggle();buildKeyboard();updateDisplay();
+}
+
+function updateCaseToggle(){
+  document.getElementById('toggle-lower').classList.toggle('active',mode==='lower');
+  document.getElementById('toggle-upper').classList.toggle('active',mode==='upper');
+}
+
+// ===== KEYBOARD =====
+function buildKeyboard(){
+  const kb=document.getElementById('keyboard');kb.innerHTML='';
   KB_ROWS.forEach(row=>{
-    const d=document.createElement('div'); d.className='kb-row';
+    const d=document.createElement('div');d.className='kb-row';
     row.forEach(key=>{
-      const b=document.createElement('button'); b.className='kb-key';
+      const b=document.createElement('button');b.className='kb-key';
       b.textContent=mode==='lower'?key.toLowerCase():key;
       b.dataset.key=key.toLowerCase();
       b.addEventListener('click',()=>handleKey(key.toLowerCase()));
@@ -415,70 +457,86 @@ function buildKeyboard() {
   });
 }
 
-function updateDisplay() {
+// ===== DISPLAY =====
+function updateDisplay(){
   const c=COUNTRIES[currentIndex];
   document.getElementById('flag-display').textContent=c.flag;
   document.getElementById('country-name').textContent=c.name;
   document.getElementById('progress').textContent=`${currentIndex+1} / ${COUNTRIES.length}`;
-  hintVisible=false; document.getElementById('hint-content').style.display='none';
+
   const target=mode==='upper'?c.romaji.toUpperCase():c.romaji;
   const rd=document.getElementById('romaji-display');
   let h='';
   for(let i=0;i<target.length;i++){
-    if(i<typedPos)h+=`<span class="typed">${target[i]}</span>`;
-    else if(i===typedPos)h+=`<span class="current">${target[i]}</span>`;
+    if(i<typedPos) h+=`<span class="typed">${target[i]}</span>`;
+    else if(i===typedPos) h+=`<span class="current">${target[i]}</span>`;
     else h+=`<span class="remaining">${target[i]}</span>`;
   }
   rd.innerHTML=h;
-  highlightExpectedKey();
+
   document.getElementById('prev-btn').disabled=currentIndex===0;
   document.getElementById('next-btn').disabled=currentIndex===COUNTRIES.length-1&&!completed[currentIndex];
 }
 
-function highlightExpectedKey() {
-  document.querySelectorAll('.kb-key').forEach(k=>k.classList.remove('highlight','correct','wrong'));
+// ===== INPUT =====
+function handleKey(key){
   const c=COUNTRIES[currentIndex];
-  if(typedPos<c.romaji.length){
-    const ex=c.romaji[typedPos].toLowerCase();
-    const el=document.querySelector(`.kb-key[data-key="${ex}"]`);
-    if(el)el.classList.add('highlight');
-  }
-}
-function updateScores(){
-  document.getElementById('input-count').textContent=inputCount;
-  document.getElementById('miss-count').textContent=missCount;
-}
+  if(typedPos>=c.romaji.length) return;
+  const expected=c.romaji[typedPos].toLowerCase();
 
-function handleKey(key) {
-  const c=COUNTRIES[currentIndex];
-  if(typedPos>=c.romaji.length)return;
-  inputCount++;
-  if(key===c.romaji[typedPos].toLowerCase()){
+  if(key===expected){
     typedPos++;
+    playCorrect();
     showKeyFeedback(key,'correct');
     if(typedPos>=c.romaji.length){
-      completed[currentIndex]=true; celebrate();
+      completed[currentIndex]=true;
+      playComplete();celebrate();
       setTimeout(()=>{
         if(currentIndex<COUNTRIES.length-1){currentIndex++;typedPos=0;updateDisplay();}
-        else showResults();
+        else{stopBGM();showResults();}
       },800);
     } else updateDisplay();
   } else {
-    missCount++;
+    playWrong();
     showKeyFeedback(key,'wrong');
   }
-  updateScores();
 }
 
 function showKeyFeedback(key,type){
   const el=document.querySelector(`.kb-key[data-key="${key}"]`);
-  if(el){el.classList.remove('highlight','correct','wrong');el.classList.add(type);
-  clearTimeout(keyFeedbackTimer);
-  keyFeedbackTimer=setTimeout(()=>{el.classList.remove('correct','wrong');highlightExpectedKey();},300);}
+  if(el){el.classList.remove('correct','wrong');el.classList.add(type);
+  clearTimeout(keyTimer);
+  keyTimer=setTimeout(()=>{el.classList.remove('correct','wrong');},300);}
 }
+
+// ===== NAV =====
 function prevCountry(){if(currentIndex>0){currentIndex--;typedPos=completed[currentIndex]?COUNTRIES[currentIndex].romaji.length:0;updateDisplay();}}
 function nextCountry(){if(currentIndex<COUNTRIES.length-1){currentIndex++;typedPos=completed[currentIndex]?COUNTRIES[currentIndex].romaji.length:0;updateDisplay();}}
 
+// ===== COUNTRY LIST =====
+function openCountryList(){
+  const grid=document.getElementById('country-grid');grid.innerHTML='';
+  COUNTRIES.forEach((c,i)=>{
+    const card=document.createElement('div');
+    card.className='country-card'+(completed[i]?' done':'');
+    card.innerHTML=`<div class="cc-flag">${c.flag}</div><div class="cc-name">${c.name}</div>`;
+    card.addEventListener('click',()=>{
+      currentIndex=i;typedPos=completed[i]?c.romaji.length:0;
+      closeCountryList();updateDisplay();
+    });
+    grid.appendChild(card);
+  });
+  document.getElementById('country-list-modal').classList.add('show');
+}
+function closeCountryList(){document.getElementById('country-list-modal').classList.remove('show');}
+
+// ===== MODALS =====
+function openSoundSettings(){document.getElementById('sound-modal').classList.add('show');}
+function closeSoundSettings(){document.getElementById('sound-modal').classList.remove('show');}
+function openRomajiTable(){document.getElementById('romaji-modal').classList.add('show');}
+function closeRomajiTable(){document.getElementById('romaji-modal').classList.remove('show');}
+
+// ===== CELEBRATE =====
 function celebrate(){
   const ct=document.getElementById('celebration');ct.innerHTML='';
   const cols=['#FF9800','#4CAF50','#2196F3','#F44336','#9C27B0','#FFEB3B'];
@@ -489,18 +547,16 @@ function celebrate(){
   setTimeout(()=>{ct.innerHTML='';},1200);
 }
 
+// ===== RESULTS =====
 function showResults(){
-  document.getElementById('game-screen').style.display='none';
-  document.getElementById('result-screen').style.display='flex';
-  document.getElementById('result-input').textContent=inputCount;
-  document.getElementById('result-miss').textContent=missCount;
-  const acc=inputCount>0?Math.round(((inputCount-missCount)/inputCount)*100):100;
-  document.getElementById('result-accuracy').textContent=acc+'%';
+  showScreen('result-screen');
+  document.getElementById('result-total').textContent=COUNTRIES.length;
 }
 
+// ===== PHYSICAL KEYBOARD =====
 document.addEventListener('keydown',e=>{
-  if(document.getElementById('game-screen').style.display!=='flex')return;
-  if(document.getElementById('romaji-modal').classList.contains('show'))return;
+  if(!document.getElementById('game-screen').classList.contains('active')) return;
+  if(document.querySelector('.modal-overlay.show')) return;
   const k=e.key.toLowerCase();
   if(/^[a-z]$/.test(k)){e.preventDefault();handleKey(k);}
 });
