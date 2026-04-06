@@ -36,15 +36,19 @@ html,body{width:100%;height:100%;font-family:'M PLUS Rounded 1c',sans-serif;back
 
 /* Display: 3 columns */
 .display-area{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 12px;min-height:0;gap:12px}
-.col-shape{width:clamp(80px,22vw,140px);height:clamp(80px,22vw,140px);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.col-shape{width:clamp(80px,22vw,140px);height:clamp(80px,22vw,140px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative}
 .col-shape svg{width:100%;height:100%}
+.shape-hidden{font-size:clamp(50px,14vw,90px);display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.shape-reveal{animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+
 .col-name{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:1;min-width:0}
 .country-name{font-size:clamp(18px,4.5vw,32px);font-weight:900;text-align:center;line-height:1.2;word-break:keep-all}
 .col-romaji{flex-shrink:1;min-width:0}
 .romaji-box{background:var(--white);border:3px solid var(--blue);border-radius:14px;padding:8px 14px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.08);min-width:clamp(100px,25vw,200px);min-height:clamp(40px,8vw,56px);display:flex;align-items:center;justify-content:center}
 .romaji-text{font-size:clamp(22px,5.5vw,38px);font-weight:900;letter-spacing:2px;word-break:break-all;font-family:'Courier New',monospace}
 .romaji-text .typed{color:var(--green)}
-.romaji-text .cursor{color:var(--orange);animation:blink 0.7s step-end infinite}
+.romaji-text .cursor{color:var(--orange);animation:blink .7s step-end infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
 /* Nav */
@@ -53,13 +57,13 @@ html,body{width:100%;height:100%;font-family:'M PLUS Rounded 1c',sans-serif;back
 .nav-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue-dark)}
 .nav-btn:disabled{opacity:.3;cursor:default}
 
-/* Keyboard */
+/* Keyboard - i/j fixed with serif */
 .keyboard-wrap{padding:6px 4px 10px;background:#CFD8DC;border-top:2px solid #B0BEC5;flex-shrink:0;position:relative}
 .kb-row{display:flex;justify-content:center;gap:4px;margin-bottom:4px}
-.kb-key{display:flex;align-items:center;justify-content:center;background:var(--white);border:1px solid #B0BEC5;border-radius:8px;font-family:'Courier New',monospace;font-size:clamp(18px,4.5vw,26px);font-weight:700;min-width:clamp(30px,8.5vw,50px);height:clamp(46px,11.5vw,62px);cursor:pointer;box-shadow:0 3px 0 #B0BEC5;-webkit-tap-highlight-color:transparent}
+.kb-key{display:flex;align-items:center;justify-content:center;background:var(--white);border:1px solid #B0BEC5;border-radius:8px;font-family:'Georgia','Times New Roman',serif;font-size:clamp(18px,4.5vw,26px);font-weight:700;min-width:clamp(30px,8.5vw,50px);height:clamp(46px,11.5vw,62px);cursor:pointer;box-shadow:0 3px 0 #B0BEC5;-webkit-tap-highlight-color:transparent;transition:none}
 .kb-key:active{transform:translateY(2px);box-shadow:0 1px 0 #B0BEC5}
-.kb-key.correct{background:var(--green-light);border-color:var(--green)}
-.kb-key.wrong{background:var(--red-light);border-color:var(--red);animation:shake .3s}
+.kb-key.correct{background:var(--green-light)!important;border-color:var(--green)!important}
+.kb-key.wrong{background:var(--red-light)!important;border-color:var(--red)!important;animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .romaji-table-float{position:absolute;right:6px;bottom:6px;background:rgba(120,144,156,.65);color:#FFF;border:none;border-radius:6px;padding:3px 8px;font-family:inherit;font-size:10px;font-weight:700;cursor:pointer}
 
@@ -75,10 +79,11 @@ html,body{width:100%;height:100%;font-family:'M PLUS Rounded 1c',sans-serif;back
 .country-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .country-card{background:#F5F5F5;border-radius:10px;padding:6px 4px;text-align:center;cursor:pointer;border:2px solid transparent}
 .country-card:active{background:var(--blue-light)}
-.country-card .cc-shape{width:50px;height:50px;margin:0 auto}
+.country-card .cc-shape{width:50px;height:50px;margin:0 auto;display:flex;align-items:center;justify-content:center}
 .country-card .cc-shape svg{width:100%;height:100%}
 .country-card .cc-name{font-size:10px;font-weight:700;line-height:1.2;margin-top:2px;word-break:keep-all}
 .country-card.done{border-color:var(--green);background:var(--green-light)}
+.country-card .cc-locked{font-size:28px}
 
 /* Sound settings */
 .sound-settings{display:flex;flex-direction:column;gap:12px;padding:8px 0}
@@ -173,53 +178,51 @@ html,body{width:100%;height:100%;font-family:'M PLUS Rounded 1c',sans-serif;back
     <h2>🔊 サウンド設定</h2>
     <button class="modal-close" onclick="closeSoundSettings()">✕ とじる</button>
     <div class="sound-settings">
-      <div class="sound-section">
-        <h3>🎵 BGM</h3>
-        <div class="sound-options" id="bgm-options"></div>
-      </div>
-      <div class="sound-section">
-        <h3>✅ せいかい音</h3>
-        <div class="sound-options" id="correct-options"></div>
-      </div>
-      <div class="sound-section">
-        <h3>❌ ミス音</h3>
-        <div class="sound-options" id="wrong-options"></div>
-      </div>
+      <div class="sound-section"><h3>🎵 BGM</h3><div class="sound-options" id="bgm-options"></div></div>
+      <div class="sound-section"><h3>✅ せいかい音</h3><div class="sound-options" id="correct-options"></div></div>
+      <div class="sound-section"><h3>❌ ミス音</h3><div class="sound-options" id="wrong-options"></div></div>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="romaji-modal">
   <div class="modal-content">
-    <h2>📖 ローマ字表</h2>
+    <h2>📖 ローマ字ひょう</h2>
     <button class="modal-close" onclick="closeRomajiTable()">✕ とじる</button>
     <table class="romaji-table">
-      <tr><th></th><th>ア段</th><th>イ段</th><th>ウ段</th><th>エ段</th><th>オ段</th></tr>
-      <tr><th>ア行</th><td><span class="kana">ア</span><br><span class="roma">a</span></td><td><span class="kana">イ</span><br><span class="roma">i</span></td><td><span class="kana">ウ</span><br><span class="roma">u</span></td><td><span class="kana">エ</span><br><span class="roma">e</span></td><td><span class="kana">オ</span><br><span class="roma">o</span></td></tr>
-      <tr><th>カ行</th><td><span class="kana">カ</span><br><span class="roma">ka</span></td><td><span class="kana">キ</span><br><span class="roma">ki</span></td><td><span class="kana">ク</span><br><span class="roma">ku</span></td><td><span class="kana">ケ</span><br><span class="roma">ke</span></td><td><span class="kana">コ</span><br><span class="roma">ko</span></td></tr>
-      <tr><th>サ行</th><td><span class="kana">サ</span><br><span class="roma">sa</span></td><td><span class="kana">シ</span><br><span class="roma">shi</span></td><td><span class="kana">ス</span><br><span class="roma">su</span></td><td><span class="kana">セ</span><br><span class="roma">se</span></td><td><span class="kana">ソ</span><br><span class="roma">so</span></td></tr>
-      <tr><th>タ行</th><td><span class="kana">タ</span><br><span class="roma">ta</span></td><td><span class="kana">チ</span><br><span class="roma">chi</span></td><td><span class="kana">ツ</span><br><span class="roma">tsu</span></td><td><span class="kana">テ</span><br><span class="roma">te</span></td><td><span class="kana">ト</span><br><span class="roma">to</span></td></tr>
-      <tr><th>ナ行</th><td><span class="kana">ナ</span><br><span class="roma">na</span></td><td><span class="kana">ニ</span><br><span class="roma">ni</span></td><td><span class="kana">ヌ</span><br><span class="roma">nu</span></td><td><span class="kana">ネ</span><br><span class="roma">ne</span></td><td><span class="kana">ノ</span><br><span class="roma">no</span></td></tr>
-      <tr><th>ハ行</th><td><span class="kana">ハ</span><br><span class="roma">ha</span></td><td><span class="kana">ヒ</span><br><span class="roma">hi</span></td><td><span class="kana">フ</span><br><span class="roma">fu</span></td><td><span class="kana">ヘ</span><br><span class="roma">he</span></td><td><span class="kana">ホ</span><br><span class="roma">ho</span></td></tr>
-      <tr><th>マ行</th><td><span class="kana">マ</span><br><span class="roma">ma</span></td><td><span class="kana">ミ</span><br><span class="roma">mi</span></td><td><span class="kana">ム</span><br><span class="roma">mu</span></td><td><span class="kana">メ</span><br><span class="roma">me</span></td><td><span class="kana">モ</span><br><span class="roma">mo</span></td></tr>
-      <tr><th>ヤ行</th><td><span class="kana">ヤ</span><br><span class="roma">ya</span></td><td></td><td><span class="kana">ユ</span><br><span class="roma">yu</span></td><td></td><td><span class="kana">ヨ</span><br><span class="roma">yo</span></td></tr>
-      <tr><th>ラ行</th><td><span class="kana">ラ</span><br><span class="roma">ra</span></td><td><span class="kana">リ</span><br><span class="roma">ri</span></td><td><span class="kana">ル</span><br><span class="roma">ru</span></td><td><span class="kana">レ</span><br><span class="roma">re</span></td><td><span class="kana">ロ</span><br><span class="roma">ro</span></td></tr>
-      <tr><th>ワ行</th><td><span class="kana">ワ</span><br><span class="roma">wa</span></td><td></td><td></td><td></td><td><span class="kana">ヲ</span><br><span class="roma">wo</span></td></tr>
-      <tr><th>ン</th><td colspan="5"><span class="kana">ン</span> → <span class="roma">n</span></td></tr>
+      <tr><th></th><th>あ段</th><th>い段</th><th>う段</th><th>え段</th><th>お段</th></tr>
+      <tr><th>あ行</th><td><span class="kana">あ</span><br><span class="roma">a (A)</span></td><td><span class="kana">い</span><br><span class="roma">i (I)</span></td><td><span class="kana">う</span><br><span class="roma">u (U)</span></td><td><span class="kana">え</span><br><span class="roma">e (E)</span></td><td><span class="kana">お</span><br><span class="roma">o (O)</span></td></tr>
+      <tr><th>か行</th><td><span class="kana">か</span><br><span class="roma">ka (KA)</span></td><td><span class="kana">き</span><br><span class="roma">ki (KI)</span></td><td><span class="kana">く</span><br><span class="roma">ku (KU)</span></td><td><span class="kana">け</span><br><span class="roma">ke (KE)</span></td><td><span class="kana">こ</span><br><span class="roma">ko (KO)</span></td></tr>
+      <tr><th>さ行</th><td><span class="kana">さ</span><br><span class="roma">sa (SA)</span></td><td><span class="kana">し</span><br><span class="roma">shi (SHI)</span></td><td><span class="kana">す</span><br><span class="roma">su (SU)</span></td><td><span class="kana">せ</span><br><span class="roma">se (SE)</span></td><td><span class="kana">そ</span><br><span class="roma">so (SO)</span></td></tr>
+      <tr><th>た行</th><td><span class="kana">た</span><br><span class="roma">ta (TA)</span></td><td><span class="kana">ち</span><br><span class="roma">chi (CHI)</span></td><td><span class="kana">つ</span><br><span class="roma">tsu (TSU)</span></td><td><span class="kana">て</span><br><span class="roma">te (TE)</span></td><td><span class="kana">と</span><br><span class="roma">to (TO)</span></td></tr>
+      <tr><th>な行</th><td><span class="kana">な</span><br><span class="roma">na (NA)</span></td><td><span class="kana">に</span><br><span class="roma">ni (NI)</span></td><td><span class="kana">ぬ</span><br><span class="roma">nu (NU)</span></td><td><span class="kana">ね</span><br><span class="roma">ne (NE)</span></td><td><span class="kana">の</span><br><span class="roma">no (NO)</span></td></tr>
+      <tr><th>は行</th><td><span class="kana">は</span><br><span class="roma">ha (HA)</span></td><td><span class="kana">ひ</span><br><span class="roma">hi (HI)</span></td><td><span class="kana">ふ</span><br><span class="roma">fu (FU)</span></td><td><span class="kana">へ</span><br><span class="roma">he (HE)</span></td><td><span class="kana">ほ</span><br><span class="roma">ho (HO)</span></td></tr>
+      <tr><th>ま行</th><td><span class="kana">ま</span><br><span class="roma">ma (MA)</span></td><td><span class="kana">み</span><br><span class="roma">mi (MI)</span></td><td><span class="kana">む</span><br><span class="roma">mu (MU)</span></td><td><span class="kana">め</span><br><span class="roma">me (ME)</span></td><td><span class="kana">も</span><br><span class="roma">mo (MO)</span></td></tr>
+      <tr><th>や行</th><td><span class="kana">や</span><br><span class="roma">ya (YA)</span></td><td></td><td><span class="kana">ゆ</span><br><span class="roma">yu (YU)</span></td><td></td><td><span class="kana">よ</span><br><span class="roma">yo (YO)</span></td></tr>
+      <tr><th>ら行</th><td><span class="kana">ら</span><br><span class="roma">ra (RA)</span></td><td><span class="kana">り</span><br><span class="roma">ri (RI)</span></td><td><span class="kana">る</span><br><span class="roma">ru (RU)</span></td><td><span class="kana">れ</span><br><span class="roma">re (RE)</span></td><td><span class="kana">ろ</span><br><span class="roma">ro (RO)</span></td></tr>
+      <tr><th>わ行</th><td><span class="kana">わ</span><br><span class="roma">wa (WA)</span></td><td></td><td></td><td></td><td><span class="kana">を</span><br><span class="roma">wo (WO)</span></td></tr>
+      <tr><th>ん</th><td colspan="5"><span class="kana">ん</span> → <span class="roma">n (N)</span></td></tr>
       <tr><th colspan="6" style="background:#E65100;padding:6px">だくおん</th></tr>
-      <tr><th>ガ行</th><td><span class="kana">ガ</span><br><span class="roma">ga</span></td><td><span class="kana">ギ</span><br><span class="roma">gi</span></td><td><span class="kana">グ</span><br><span class="roma">gu</span></td><td><span class="kana">ゲ</span><br><span class="roma">ge</span></td><td><span class="kana">ゴ</span><br><span class="roma">go</span></td></tr>
-      <tr><th>ザ行</th><td><span class="kana">ザ</span><br><span class="roma">za</span></td><td><span class="kana">ジ</span><br><span class="roma">ji</span></td><td><span class="kana">ズ</span><br><span class="roma">zu</span></td><td><span class="kana">ゼ</span><br><span class="roma">ze</span></td><td><span class="kana">ゾ</span><br><span class="roma">zo</span></td></tr>
-      <tr><th>ダ行</th><td><span class="kana">ダ</span><br><span class="roma">da</span></td><td><span class="kana">ヂ</span><br><span class="roma">di</span></td><td><span class="kana">ヅ</span><br><span class="roma">du</span></td><td><span class="kana">デ</span><br><span class="roma">de</span></td><td><span class="kana">ド</span><br><span class="roma">do</span></td></tr>
-      <tr><th>バ行</th><td><span class="kana">バ</span><br><span class="roma">ba</span></td><td><span class="kana">ビ</span><br><span class="roma">bi</span></td><td><span class="kana">ブ</span><br><span class="roma">bu</span></td><td><span class="kana">ベ</span><br><span class="roma">be</span></td><td><span class="kana">ボ</span><br><span class="roma">bo</span></td></tr>
-      <tr><th>パ行</th><td><span class="kana">パ</span><br><span class="roma">pa</span></td><td><span class="kana">ピ</span><br><span class="roma">pi</span></td><td><span class="kana">プ</span><br><span class="roma">pu</span></td><td><span class="kana">ペ</span><br><span class="roma">pe</span></td><td><span class="kana">ポ</span><br><span class="roma">po</span></td></tr>
+      <tr><th>が行</th><td><span class="kana">が</span><br><span class="roma">ga (GA)</span></td><td><span class="kana">ぎ</span><br><span class="roma">gi (GI)</span></td><td><span class="kana">ぐ</span><br><span class="roma">gu (GU)</span></td><td><span class="kana">げ</span><br><span class="roma">ge (GE)</span></td><td><span class="kana">ご</span><br><span class="roma">go (GO)</span></td></tr>
+      <tr><th>ざ行</th><td><span class="kana">ざ</span><br><span class="roma">za (ZA)</span></td><td><span class="kana">じ</span><br><span class="roma">ji (JI)</span></td><td><span class="kana">ず</span><br><span class="roma">zu (ZU)</span></td><td><span class="kana">ぜ</span><br><span class="roma">ze (ZE)</span></td><td><span class="kana">ぞ</span><br><span class="roma">zo (ZO)</span></td></tr>
+      <tr><th>だ行</th><td><span class="kana">だ</span><br><span class="roma">da (DA)</span></td><td><span class="kana">ぢ</span><br><span class="roma">di (DI)</span></td><td><span class="kana">づ</span><br><span class="roma">du (DU)</span></td><td><span class="kana">で</span><br><span class="roma">de (DE)</span></td><td><span class="kana">ど</span><br><span class="roma">do (DO)</span></td></tr>
+      <tr><th>ば行</th><td><span class="kana">ば</span><br><span class="roma">ba (BA)</span></td><td><span class="kana">び</span><br><span class="roma">bi (BI)</span></td><td><span class="kana">ぶ</span><br><span class="roma">bu (BU)</span></td><td><span class="kana">べ</span><br><span class="roma">be (BE)</span></td><td><span class="kana">ぼ</span><br><span class="roma">bo (BO)</span></td></tr>
+      <tr><th>ぱ行</th><td><span class="kana">ぱ</span><br><span class="roma">pa (PA)</span></td><td><span class="kana">ぴ</span><br><span class="roma">pi (PI)</span></td><td><span class="kana">ぷ</span><br><span class="roma">pu (PU)</span></td><td><span class="kana">ぺ</span><br><span class="roma">pe (PE)</span></td><td><span class="kana">ぽ</span><br><span class="roma">po (PO)</span></td></tr>
       <tr><th colspan="6" style="background:#E65100;padding:6px">ようおん</th></tr>
-      <tr><th>キャ</th><td><span class="kana">キャ</span><br><span class="roma">kya</span></td><td></td><td><span class="kana">キュ</span><br><span class="roma">kyu</span></td><td></td><td><span class="kana">キョ</span><br><span class="roma">kyo</span></td></tr>
-      <tr><th>シャ</th><td><span class="kana">シャ</span><br><span class="roma">sha</span></td><td></td><td><span class="kana">シュ</span><br><span class="roma">shu</span></td><td></td><td><span class="kana">ショ</span><br><span class="roma">sho</span></td></tr>
-      <tr><th>チャ</th><td><span class="kana">チャ</span><br><span class="roma">cha</span></td><td></td><td><span class="kana">チュ</span><br><span class="roma">chu</span></td><td></td><td><span class="kana">チョ</span><br><span class="roma">cho</span></td></tr>
-      <tr><th>ジャ</th><td><span class="kana">ジャ</span><br><span class="roma">ja</span></td><td></td><td><span class="kana">ジュ</span><br><span class="roma">ju</span></td><td></td><td><span class="kana">ジョ</span><br><span class="roma">jo</span></td></tr>
+      <tr><th>きゃ</th><td><span class="kana">きゃ</span><br><span class="roma">kya</span></td><td></td><td><span class="kana">きゅ</span><br><span class="roma">kyu</span></td><td></td><td><span class="kana">きょ</span><br><span class="roma">kyo</span></td></tr>
+      <tr><th>しゃ</th><td><span class="kana">しゃ</span><br><span class="roma">sha</span></td><td></td><td><span class="kana">しゅ</span><br><span class="roma">shu</span></td><td></td><td><span class="kana">しょ</span><br><span class="roma">sho</span></td></tr>
+      <tr><th>ちゃ</th><td><span class="kana">ちゃ</span><br><span class="roma">cha</span></td><td></td><td><span class="kana">ちゅ</span><br><span class="roma">chu</span></td><td></td><td><span class="kana">ちょ</span><br><span class="roma">cho</span></td></tr>
+      <tr><th>にゃ</th><td><span class="kana">にゃ</span><br><span class="roma">nya</span></td><td></td><td><span class="kana">にゅ</span><br><span class="roma">nyu</span></td><td></td><td><span class="kana">にょ</span><br><span class="roma">nyo</span></td></tr>
+      <tr><th>ひゃ</th><td><span class="kana">ひゃ</span><br><span class="roma">hya</span></td><td></td><td><span class="kana">ひゅ</span><br><span class="roma">hyu</span></td><td></td><td><span class="kana">ひょ</span><br><span class="roma">hyo</span></td></tr>
+      <tr><th>みゃ</th><td><span class="kana">みゃ</span><br><span class="roma">mya</span></td><td></td><td><span class="kana">みゅ</span><br><span class="roma">myu</span></td><td></td><td><span class="kana">みょ</span><br><span class="roma">myo</span></td></tr>
+      <tr><th>りゃ</th><td><span class="kana">りゃ</span><br><span class="roma">rya</span></td><td></td><td><span class="kana">りゅ</span><br><span class="roma">ryu</span></td><td></td><td><span class="kana">りょ</span><br><span class="roma">ryo</span></td></tr>
+      <tr><th>ぎゃ</th><td><span class="kana">ぎゃ</span><br><span class="roma">gya</span></td><td></td><td><span class="kana">ぎゅ</span><br><span class="roma">gyu</span></td><td></td><td><span class="kana">ぎょ</span><br><span class="roma">gyo</span></td></tr>
+      <tr><th>じゃ</th><td><span class="kana">じゃ</span><br><span class="roma">ja</span></td><td></td><td><span class="kana">じゅ</span><br><span class="roma">ju</span></td><td></td><td><span class="kana">じょ</span><br><span class="roma">jo</span></td></tr>
+      <tr><th>びゃ</th><td><span class="kana">びゃ</span><br><span class="roma">bya</span></td><td></td><td><span class="kana">びゅ</span><br><span class="roma">byu</span></td><td></td><td><span class="kana">びょ</span><br><span class="roma">byo</span></td></tr>
+      <tr><th>ぴゃ</th><td><span class="kana">ぴゃ</span><br><span class="roma">pya</span></td><td></td><td><span class="kana">ぴゅ</span><br><span class="roma">pyu</span></td><td></td><td><span class="kana">ぴょ</span><br><span class="roma">pyo</span></td></tr>
       <tr><th colspan="6" style="background:#E65100;padding:6px">とくべつ</th></tr>
-      <tr><th>ッ</th><td colspan="5"><span class="kana">ッ</span> → <span class="roma">つぎの子音を2回　例: nippon</span></td></tr>
-      <tr><th>ー</th><td colspan="5"><span class="kana">ー</span> → <span class="roma">ぼいんをくりかえす　例: toukyou</span></td></tr>
+      <tr><th>っ</th><td colspan="5"><span class="kana">っ（そくおん）</span><br><span class="roma">つぎの子音を2回　例: nippon</span></td></tr>
+      <tr><th>ー</th><td colspan="5"><span class="kana">ー（ちょうおん）</span><br><span class="roma">ぼいんをくりかえす　例: toukyou</span></td></tr>
     </table>
   </div>
 </div>
@@ -1127,32 +1130,31 @@ const KB_ROWS=[
 ['Z','X','C','V','B','N','M'],
 ];
 
-// ===== STATE =====
-let mode='lower',currentIndex=0,typedPos=0,completed=[],keyTimer=null,isProcessing=false;
+let mode='lower',currentIndex=0,typedPos=0,completed=[],isProcessing=false;
 let settings={bgm:'off',correct:'ピコ',wrong:'ブッ'};
 let audioCtx=null,bgmInterval=null;
+// Per-key timers to fix red staying
+let keyTimers={};
 
-// ===== AUDIO ENGINE =====
 function getCtx(){
   if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
   if(audioCtx.state==='suspended')audioCtx.resume();
   return audioCtx;
 }
 
+// Sound functions - each creates fresh nodes (no overlap issue)
 const CORRECT_SOUNDS={
   'ピコ':(ctx)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(880,ctx.currentTime);o.frequency.setValueAtTime(1100,ctx.currentTime+.08);o.type='sine';g.gain.setValueAtTime(.2,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.2);o.start();o.stop(ctx.currentTime+.2)},
   'チーン':(ctx)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=1200;o.type='sine';g.gain.setValueAtTime(.15,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.4);o.start();o.stop(ctx.currentTime+.4)},
   'ポン':(ctx)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(600,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(300,ctx.currentTime+.15);o.type='sine';g.gain.setValueAtTime(.25,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.15);o.start();o.stop(ctx.currentTime+.15)},
   'キラン':(ctx)=>{[1318,1568].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(.15,ctx.currentTime+i*.1);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.1+.25);o.start(ctx.currentTime+i*.1);o.stop(ctx.currentTime+i*.1+.25)})},
 };
-
 const WRONG_SOUNDS={
   'ブッ':(ctx)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=150;o.type='square';g.gain.setValueAtTime(.12,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.15);o.start();o.stop(ctx.currentTime+.15)},
   'ビー':(ctx)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=200;o.type='sawtooth';g.gain.setValueAtTime(.1,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.25);o.start();o.stop(ctx.currentTime+.25)},
   'ドン':(ctx)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(100,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(40,ctx.currentTime+.2);o.type='sine';g.gain.setValueAtTime(.2,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.2);o.start();o.stop(ctx.currentTime+.2)},
   'ピヨッ':(ctx)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(400,ctx.currentTime);o.frequency.setValueAtTime(250,ctx.currentTime+.05);o.type='triangle';g.gain.setValueAtTime(.15,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.12);o.start();o.stop(ctx.currentTime+.12)},
 };
-
 const BGM_LIST={
   'off':null,
   'たのしい':[{f:523,d:.2},{f:587,d:.2},{f:659,d:.2},{f:784,d:.4},{f:659,d:.2},{f:784,d:.2},{f:880,d:.4},{f:784,d:.2},{f:659,d:.2},{f:587,d:.2},{f:523,d:.4},{f:587,d:.2},{f:659,d:.4},{f:523,d:.4},{f:0,d:.3}],
@@ -1164,57 +1166,24 @@ function playCorrectSE(){try{if(settings.correct==='off')return;const fn=CORRECT
 function playWrongSE(){try{if(settings.wrong==='off')return;const fn=WRONG_SOUNDS[settings.wrong];if(fn)fn(getCtx())}catch(e){}}
 function playComplete(){try{const ctx=getCtx();[523,659,784,1047].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(.18,ctx.currentTime+i*.1);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.1+.3);o.start(ctx.currentTime+i*.1);o.stop(ctx.currentTime+i*.1+.3)})}catch(e){}}
 
-function startBGM(){
-  stopBGM();if(settings.bgm==='off')return;
-  const melody=BGM_LIST[settings.bgm];if(!melody)return;
-  try{const ctx=getCtx();let idx=0;
-  function next(){if(settings.bgm==='off'){stopBGM();return;}
-  const n=melody[idx%melody.length];
-  if(n.f>0){const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=n.f;o.type='triangle';g.gain.setValueAtTime(.05,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+n.d*.85);o.start();o.stop(ctx.currentTime+n.d)}
-  idx++;bgmInterval=setTimeout(next,n.d*1000)}
-  next()}catch(e){}
-}
+function startBGM(){stopBGM();if(settings.bgm==='off')return;const melody=BGM_LIST[settings.bgm];if(!melody)return;try{const ctx=getCtx();let idx=0;function next(){if(settings.bgm==='off'){stopBGM();return}const n=melody[idx%melody.length];if(n.f>0){const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=n.f;o.type='triangle';g.gain.setValueAtTime(.05,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+n.d*.85);o.start();o.stop(ctx.currentTime+n.d)}idx++;bgmInterval=setTimeout(next,n.d*1000)}next()}catch(e){}}
 function stopBGM(){if(bgmInterval){clearTimeout(bgmInterval);bgmInterval=null}}
 
-// ===== SOUND SETTINGS UI =====
 function buildSoundSettings(){
-  const bgmEl=document.getElementById('bgm-options');
-  bgmEl.innerHTML='';
-  ['off','たのしい','おだやか','マーチ'].forEach(name=>{
-    const b=document.createElement('button');
-    b.className='sound-opt'+(name==='off'?' off-opt':'')+(settings.bgm===name?' selected':'');
-    b.textContent=name==='off'?'OFF':name;
-    b.onclick=()=>{settings.bgm=name;buildSoundSettings();if(name!=='off'){startBGM()}else{stopBGM()}};
-    bgmEl.appendChild(b);
-  });
-  const corEl=document.getElementById('correct-options');
-  corEl.innerHTML='';
-  ['off',...Object.keys(CORRECT_SOUNDS)].forEach(name=>{
-    const b=document.createElement('button');
-    b.className='sound-opt'+(name==='off'?' off-opt':'')+(settings.correct===name?' selected':'');
-    b.textContent=name==='off'?'OFF':name;
-    b.onclick=()=>{settings.correct=name;buildSoundSettings();if(name!=='off')try{CORRECT_SOUNDS[name](getCtx())}catch(e){}};
-    corEl.appendChild(b);
-  });
-  const wrEl=document.getElementById('wrong-options');
-  wrEl.innerHTML='';
-  ['off',...Object.keys(WRONG_SOUNDS)].forEach(name=>{
-    const b=document.createElement('button');
-    b.className='sound-opt'+(name==='off'?' off-opt':'')+(settings.wrong===name?' selected':'');
-    b.textContent=name==='off'?'OFF':name;
-    b.onclick=()=>{settings.wrong=name;buildSoundSettings();if(name!=='off')try{WRONG_SOUNDS[name](getCtx())}catch(e){}};
-    wrEl.appendChild(b);
-  });
+  const bgmEl=document.getElementById('bgm-options');bgmEl.innerHTML='';
+  ['off','たのしい','おだやか','マーチ'].forEach(name=>{const b=document.createElement('button');b.className='sound-opt'+(name==='off'?' off-opt':'')+(settings.bgm===name?' selected':'');b.textContent=name==='off'?'OFF':name;b.onclick=()=>{settings.bgm=name;buildSoundSettings();if(name!=='off')startBGM();else stopBGM()};bgmEl.appendChild(b)});
+  const corEl=document.getElementById('correct-options');corEl.innerHTML='';
+  ['off',...Object.keys(CORRECT_SOUNDS)].forEach(name=>{const b=document.createElement('button');b.className='sound-opt'+(name==='off'?' off-opt':'')+(settings.correct===name?' selected':'');b.textContent=name==='off'?'OFF':name;b.onclick=()=>{settings.correct=name;buildSoundSettings();if(name!=='off')try{CORRECT_SOUNDS[name](getCtx())}catch(e){}};corEl.appendChild(b)});
+  const wrEl=document.getElementById('wrong-options');wrEl.innerHTML='';
+  ['off',...Object.keys(WRONG_SOUNDS)].forEach(name=>{const b=document.createElement('button');b.className='sound-opt'+(name==='off'?' off-opt':'')+(settings.wrong===name?' selected':'');b.textContent=name==='off'?'OFF':name;b.onclick=()=>{settings.wrong=name;buildSoundSettings();if(name!=='off')try{WRONG_SOUNDS[name](getCtx())}catch(e){}};wrEl.appendChild(b)});
 }
 
-// ===== SCREENS =====
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
 function startGame(m){mode=m;currentIndex=0;typedPos=0;completed=new Array(COUNTRIES.length).fill(false);showScreen('game-screen');updateCaseToggle();buildKeyboard();updateDisplay();if(settings.bgm!=='off')startBGM()}
 function goHome(){stopBGM();showScreen('title-screen')}
 function switchCase(m){mode=m;updateCaseToggle();buildKeyboard();updateDisplay()}
 function updateCaseToggle(){document.getElementById('toggle-lower').classList.toggle('active',mode==='lower');document.getElementById('toggle-upper').classList.toggle('active',mode==='upper')}
 
-// ===== KEYBOARD =====
 function buildKeyboard(){
   const kb=document.getElementById('keyboard');kb.innerHTML='';
   KB_ROWS.forEach(row=>{const d=document.createElement('div');d.className='kb-row';
@@ -1225,10 +1194,15 @@ function buildKeyboard(){
   d.appendChild(b)});kb.appendChild(d)});
 }
 
-// ===== DISPLAY (typed chars only) =====
+// Display: ❓ when not completed, SVG when completed
 function updateDisplay(){
   const c=COUNTRIES[currentIndex];
-  document.getElementById('shape-display').innerHTML=c.svg;
+  const shapeEl=document.getElementById('shape-display');
+  if(completed[currentIndex]){
+    shapeEl.innerHTML=c.svg;
+  }else{
+    shapeEl.innerHTML='<div class="shape-hidden">❓</div>';
+  }
   document.getElementById('country-name').textContent=c.name;
   document.getElementById('progress').textContent=`${currentIndex+1}/${COUNTRIES.length}`;
   const rd=document.getElementById('romaji-display');
@@ -1241,58 +1215,85 @@ function updateDisplay(){
   document.getElementById('next-btn').disabled=currentIndex===COUNTRIES.length-1&&!completed[currentIndex];
 }
 
-// ===== INPUT (with lock to prevent double-fire) =====
+function revealShape(){
+  const shapeEl=document.getElementById('shape-display');
+  const c=COUNTRIES[currentIndex];
+  shapeEl.innerHTML=`<div class="shape-reveal">${c.svg}</div>`;
+}
+
 function handleKey(key){
   if(isProcessing)return;
   const c=COUNTRIES[currentIndex];
   if(typedPos>=c.romaji.length)return;
   const expected=c.romaji[typedPos].toLowerCase();
   if(key===expected){
-    typedPos++;playCorrectSE();showKeyFeedback(key,'correct');
+    typedPos++;
+    playCorrectSE();
+    showKeyFeedback(key,'correct');
     if(typedPos>=c.romaji.length){
-      isProcessing=true;completed[currentIndex]=true;playComplete();celebrate();
+      isProcessing=true;completed[currentIndex]=true;
+      playComplete();revealShape();celebrate();
+      // Update romaji display to show full word
+      const target=mode==='upper'?c.romaji.toUpperCase():c.romaji;
+      let h='';for(let i=0;i<target.length;i++)h+=`<span class="typed">${target[i]}</span>`;
+      document.getElementById('romaji-display').innerHTML=h;
       setTimeout(()=>{isProcessing=false;
       if(currentIndex<COUNTRIES.length-1){currentIndex++;typedPos=0;updateDisplay()}
-      else{stopBGM();showResults()}},900);
+      else{stopBGM();showResults()}},1200);
     }else updateDisplay();
   }else{
-    playWrongSE();showKeyFeedback(key,'wrong');
+    playWrongSE();
+    showKeyFeedback(key,'wrong');
   }
 }
+
+// Per-key timers so each key clears independently
 function showKeyFeedback(key,type){
   const el=document.querySelector(`.kb-key[data-key="${key}"]`);
-  if(el){el.classList.remove('correct','wrong');el.classList.add(type);
-  clearTimeout(keyTimer);keyTimer=setTimeout(()=>{el.classList.remove('correct','wrong')},300)}
+  if(!el)return;
+  el.classList.remove('correct','wrong');
+  void el.offsetWidth; // force reflow for re-animation
+  el.classList.add(type);
+  if(keyTimers[key])clearTimeout(keyTimers[key]);
+  keyTimers[key]=setTimeout(()=>{el.classList.remove('correct','wrong');delete keyTimers[key]},400);
 }
 
-// ===== NAV =====
 function prevCountry(){if(currentIndex>0){currentIndex--;typedPos=completed[currentIndex]?COUNTRIES[currentIndex].romaji.length:0;updateDisplay()}}
 function nextCountry(){if(currentIndex<COUNTRIES.length-1){currentIndex++;typedPos=completed[currentIndex]?COUNTRIES[currentIndex].romaji.length:0;updateDisplay()}}
 
-// ===== COUNTRY LIST =====
+// Country list - fix: use let in for loop to capture correct index
 function openCountryList(){
   const grid=document.getElementById('country-grid');grid.innerHTML='';
-  COUNTRIES.forEach((c,i)=>{const card=document.createElement('div');
-  card.className='country-card'+(completed[i]?' done':'');
-  card.innerHTML=`<div class="cc-shape">${c.svg}</div><div class="cc-name">${c.name}</div>`;
-  card.addEventListener('click',()=>{currentIndex=i;typedPos=completed[i]?c.romaji.length:0;closeCountryList();if(document.getElementById('game-screen').classList.contains('active'))updateDisplay();else startGame(mode)});
-  grid.appendChild(card)});
+  for(let i=0;i<COUNTRIES.length;i++){
+    const c=COUNTRIES[i];
+    const card=document.createElement('div');
+    card.className='country-card'+(completed[i]?' done':'');
+    if(completed[i]){
+      card.innerHTML=`<div class="cc-shape">${c.svg}</div><div class="cc-name">${c.name}</div>`;
+    }else{
+      card.innerHTML=`<div class="cc-shape"><span class="cc-locked">❓</span></div><div class="cc-name">${c.name}</div>`;
+    }
+    card.addEventListener('click',(function(idx){return function(){
+      currentIndex=idx;typedPos=completed[idx]?COUNTRIES[idx].romaji.length:0;
+      closeCountryList();
+      if(document.getElementById('game-screen').classList.contains('active'))updateDisplay();
+      else startGame(mode);
+    }})(i));
+    grid.appendChild(card);
+  }
   document.getElementById('country-list-modal').classList.add('show');
 }
 function closeCountryList(){document.getElementById('country-list-modal').classList.remove('show')}
 
-// ===== MODALS =====
 function openSoundSettings(){buildSoundSettings();document.getElementById('sound-modal').classList.add('show')}
 function closeSoundSettings(){document.getElementById('sound-modal').classList.remove('show')}
 function openRomajiTable(){document.getElementById('romaji-modal').classList.add('show')}
 function closeRomajiTable(){document.getElementById('romaji-modal').classList.remove('show')}
 
-// ===== CELEBRATE =====
-function celebrate(){const ct=document.getElementById('celebration');ct.innerHTML='';const cols=['#FF9800','#4CAF50','#2196F3','#F44336','#9C27B0','#FFEB3B'];for(let i=0;i<20;i++){const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'%';c.style.background=cols[Math.floor(Math.random()*cols.length)];c.style.animationDelay=Math.random()*0.4+'s';c.style.width=(6+Math.random()*8)+'px';c.style.height=(6+Math.random()*8)+'px';ct.appendChild(c)}setTimeout(()=>{ct.innerHTML=''},1200)}
+function celebrate(){const ct=document.getElementById('celebration');ct.innerHTML='';const cols=['#FF9800','#4CAF50','#2196F3','#F44336','#9C27B0','#FFEB3B'];for(let i=0;i<25;i++){const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'%';c.style.background=cols[Math.floor(Math.random()*cols.length)];c.style.animationDelay=Math.random()*0.5+'s';c.style.width=(6+Math.random()*8)+'px';c.style.height=(6+Math.random()*8)+'px';ct.appendChild(c)}setTimeout(()=>{ct.innerHTML=''},1500)}
 
 function showResults(){showScreen('result-screen');document.getElementById('result-total').textContent=COUNTRIES.length}
 
-// ===== PHYSICAL KEYBOARD =====
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('game-screen').classList.contains('active'))return;
   if(document.querySelector('.modal-overlay.show'))return;
