@@ -1179,7 +1179,7 @@ function buildSoundSettings(){
 }
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
-function startGame(m){mode=m;currentIndex=0;typedPos=0;completed=new Array(COUNTRIES.length).fill(false);showScreen('game-screen');updateCaseToggle();buildKeyboard();updateDisplay();if(settings.bgm!=='off')startBGM()}
+function startGame(m){mode=m;if(!completed||completed.length!==COUNTRIES.length)completed=new Array(COUNTRIES.length).fill(false);typedPos=completed[currentIndex]?COUNTRIES[currentIndex].romaji.length:0;showScreen('game-screen');updateCaseToggle();buildKeyboard();updateDisplay();if(settings.bgm!=='off')startBGM()}
 function goHome(){stopBGM();showScreen('title-screen')}
 function switchCase(m){mode=m;updateCaseToggle();buildKeyboard();updateDisplay()}
 function updateCaseToggle(){document.getElementById('toggle-lower').classList.toggle('active',mode==='lower');document.getElementById('toggle-upper').classList.toggle('active',mode==='upper')}
@@ -1238,8 +1238,11 @@ function handleKey(key){
       let h='';for(let i=0;i<target.length;i++)h+=`<span class="typed">${target[i]}</span>`;
       document.getElementById('romaji-display').innerHTML=h;
       setTimeout(()=>{isProcessing=false;
-      if(currentIndex<COUNTRIES.length-1){currentIndex++;typedPos=0;updateDisplay()}
-      else{stopBGM();showResults()}},1200);
+      if(completed.every(Boolean)){stopBGM();showResults()}
+      else if(currentIndex<COUNTRIES.length-1){currentIndex++;typedPos=0;updateDisplay()}
+      else{/* last index but not all done - find next uncompleted */
+        let found=false;for(let i=0;i<COUNTRIES.length;i++){if(!completed[i]){currentIndex=i;typedPos=0;found=true;break}}
+        if(found)updateDisplay();else{stopBGM();showResults()}}},1200);
     }else updateDisplay();
   }else{
     playWrongSE();
